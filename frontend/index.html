@@ -57,10 +57,21 @@
     <div id="content">
         <h2>Your Time</h2>
         <p id="time-display">0:00 hours logged</p>
-        <form>
-            <input type="number" id="time-input" placeholder="Enter hours" min="0" step="0.1" required>
-            <button type="submit">Add Time</button>
-        </form>
+        <table id="time-table" border="1" cellspacing="0" cellpadding="8">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+            <form>
+                <input type="number" id="time-input" placeholder="Enter hours" min="0" step="0.1" required>
+                <button type="submit">Add Time</button>
+                </form>
+            </tbody>
+        </table>
+        
     </div>
     
     <script src="script.js"></script>
