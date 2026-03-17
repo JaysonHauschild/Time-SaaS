@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = '';
 
 // Show/hide login UI based on session
 async function checkAuth() {

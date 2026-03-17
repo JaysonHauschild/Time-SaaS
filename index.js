@@ -5,23 +5,24 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { PrismaClient } from '@prisma/client';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const prisma = new PrismaClient();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDir = path.join(__dirname, 'frontend');
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5500/frontend/index.html';
-const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:5500'];
+const APP_BASE_URL = process.env.APP_BASE_URL || 'http://localhost:3000';
+const FRONTEND_URL = process.env.FRONTEND_URL || `${APP_BASE_URL}/`;
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-            return;
-        }
-        callback(new Error('Not allowed by CORS'));
-    },
+    origin: APP_BASE_URL,
     credentials: true,
 }));
+
+app.use(express.static(frontendDir));
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -55,7 +56,7 @@ passport.use(new GoogleStrategy(
     {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3000/auth/google/callback',
+        callbackURL: `${APP_BASE_URL}/auth/google/callback`,
     },
     async (_accessToken, _refreshToken, profile, done) => {
         try {
@@ -157,6 +158,10 @@ app.get('/api/me', (req, res) => {
 });
 
 // --- Existing routes ---
+app.get('/', (_req, res) => {
+    res.sendFile(path.join(frontendDir, 'index.html'));
+});
+
 app.get('/api/data', (req, res) => {
     res.json({ message: 'This is some data from the server! Hello World!' });
 });
