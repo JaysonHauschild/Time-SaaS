@@ -7,14 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Source of truth for all users — both OAuth-only and local username/password
+model LocalUser {
+  id           String   @id @default(cuid())
+  username     String?  @unique
+  passwordHash String?  @db.Text
+  email        String?  @unique
+  displayName  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // OAuth profile linked to this local user (optional — local-only users won't have one)
+  user User?
+
+  @@map("local_users")
+}
+
 model User {
-  id        String        @id @default(cuid())
-  email     String?       @unique
-  name      String
-  photo     String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  accounts  OAuthAccount[]
+  id          String        @id @default(cuid())
+  localUserId String?       @unique
+  localUser   LocalUser?    @relation(fields: [localUserId], references: [id], onDelete: SetNull)
+  email       String?       @unique
+  name        String
+  photo       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  accounts    OAuthAccount[]
 }
 
 model OAuthAccount {
