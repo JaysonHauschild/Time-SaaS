@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Time</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #user-corner {
+            position: fixed;
+            top: 12px;
+            right: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: sans-serif;
+        }
+        #user-corner img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+        #login-btn {
+            padding: 8px 14px;
+            background: #4285F4;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #logout-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <!-- User corner -->
+    <div id="user-corner">
+        <div id="logged-out">
+            <button id="login-btn" onclick="window.location='http://localhost:3000/auth/google'">
+                Login with Google
+            </button>
+        </div>
+        <div id="logged-in" style="display:none; align-items:center; gap:10px;">
+            <img id="user-photo" src="" alt="avatar">
+            <span id="user-name"></span>
+            <button id="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div id="content">
+        <h2>Your Time</h2>
+        <p id="time-display">0:00 hours logged</p>
+        <form>
+            <input type="number" id="time-input" placeholder="Enter hours" min="0" step="0.1" required>
+            <button type="submit">Add Time</button>
+        </form>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
